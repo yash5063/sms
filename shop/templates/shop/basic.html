@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+    integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <title>{% block title%} {% endblock %}</title>
+  <style>
+  #myBtn {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  z-index: 99;
+  font-size: 18px;
+  border: none;
+  outline: none;
+  background-color: red;
+  color: white;
+  cursor: pointer;
+  padding: 15px;
+  border-radius: 4px;
+}
+
+#myBtn:hover {
+  background-color: #555;
+}
+    {% block css %}
+
+      {% endblock %}
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/shop">Parth Parlour</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/shop">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/shop/about">About Us</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/shop/tracker">Tracker</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/blog">Blog</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/shop/contact">Contact Us</a>
+        </li>
+
+
+      </ul>
+      <div class="ml-auto form-inline">
+      <form method='get' action='/shop/search/' class=" my-2 my-lg-0 mx-3">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="search"
+          id="search">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+      <button type="button" class="btn btn-secondary mx-2" id="popcart" data-container="body" data-toggle="popover"
+        data-placement="bottom" data-html="true" data-content="Vivamus
+sagittis lacus vel augue laoreet rutrum faucibus.">
+        Cart(<span id="cart">0</span>)
+      </button>
+  <div id="google_element"></div>
+
+{% if user.is_authenticated %}
+<ul class="navbar-nav mr-3">
+<li class="nav-item dropdown">
+<a class="nav-link dropdown-toggle" href='#' id="navbarDropdown" role="button" data-toggle="dropdown"> Welcome {{request.user}}</a>
+<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/shop/logout/">Logout</a>
+</div>
+      </li>
+      </ul>
+      </div>
+{% else %}
+      <!-- Button to  trigger Login modal -->
+      <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#loginModal">
+        Login
+      </button>
+
+      <!-- Button to  trigger SignUp modal -->
+      <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#signupModal">
+        SignUp
+      </button>
+{% endif %}
+      </div>
+</nav>
+      <!-- SignUp Modal -->
+      <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="signupModalTitle">SignUp Here</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="/shop/signup/" method='post'>
+                <div class="form-group">
+                  <label for="username">Username</label>
+                  <i class="fa-solid fa-user"></i>
+                  <input type="text" class="form-control" id="username" name="username"
+                    placeholder="Choose a unique username (Lowercase & alphanumeric)" required>
+                </div>
+                <div class="form-group">
+                  <label for="fname">First Name</label>
+                  <i class="fa-solid fa-user"></i>
+                  <input type="text" class="form-control" id="fname" name="fname" placeholder="Enter Your First Name" required>
+                </div>
+                <div class="form-group">
+                  <label for="lname">Last Name</label>
+                  <i class="fa-solid fa-user"></i>
+                  <input type="text" class="form-control" id="lname" name="lname" placeholder="Enter Your Last Name" required>
+                </div>
+                <div class="form-group">
+                  <label for="email">Email address</label>
+                  <i class="fa-solid fa-envelope"></i>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="name@example.com" required>
+                </div>
+                <div class="form-group">
+                  <label for="pass1">Choose a password</label>
+                  <i class="fa-solid fa-key"></i>
+                  <input type="password" class="form-control" id="pass1" name="pass1"
+                    placeholder="Choose Your Password" required>
+                </div>
+                <div class="form-group">
+                  <label for="pass2">Confirm Password</label>
+                  <i class="fa-solid fa-key"></i>
+                  <input type="password" class="form-control" id="pass2" name="pass2"
+                    placeholder="Enter your password again" required>
+                </div>
+
+
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Login Modal -->
+      <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="loginModalTitle">Login Here</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form action="/shop/login/" method='post'>
+                                {% csrf_token %}
+
+                <div class="form-group">
+                  <label for="loginusername">Username</label>
+                  <i class="fa-solid fa-user"></i>
+                  <input type="text" class="form-control" id="loginusername" name="loginusername"
+                    placeholder="Choose a unique username" required>
+                </div>
+                <div class="form-group">
+                  <label for="loginpassword">Enter your password </label>
+                  <i class="fa-solid fa-key"></i>
+                  <input type="password" class="form-control" id="loginpassword" name="loginpassword" placeholder="Enter your password " required>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+            <div class="modal-footer">
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+  {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        <strong>Message : </strong> {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+
+<button onclick="topFunction()" id="myBtn" title="Go to top">Top</button>
+  {% block body %} {% endblock %}
+
+
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+    integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+    integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k"
+    crossorigin="anonymous"></script>
+
+  <script>
+// Get the button
+let mybutton = document.getElementById("myBtn");
+
+// When the user scrolls down 20px from the top of the document, show the button
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+  if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+    mybutton.style.display = "block";
+  } else {
+    mybutton.style.display = "none";
+  }
+}
+
+// When the user clicks on the button, scroll to the top of the document
+function topFunction() {
+  document.body.scrollTop = 0;
+  document.documentElement.scrollTop = 0;
+}
+</script>
+  <script src="http://translate.google.com/translate_a/element.js?cb=loadGoogleTranslate"></script>
+  <script>
+    function loadGoogleTranslate(){
+      new google.translate.TranslateElement("google_element");
+    }
+  </script>
+  {% block js %}
+  {% endblock %}
+</body>
+
+</html>
